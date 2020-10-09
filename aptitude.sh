@@ -22,6 +22,10 @@ verify_enable_platform(){
     verify_gcc_enable $feature
 }
 add_os_flags() {
+    ## On Raspbian add -latomic 
+    if [[ "$OS" = Rasp* ]]; then
+        CMAKE_BUILD_COMMAND="${CMAKE_BUILD_COMMAND} -DCMAKE_EXE_LINKER_FLAGS=\"-latomic\" "
+    fi
     CMAKE_BUILD_COMMAND="${CMAKE_BUILD_COMMAND} -DFAIL_ON_WARNINGS= "
 }
 bootstrap_cmake(){
