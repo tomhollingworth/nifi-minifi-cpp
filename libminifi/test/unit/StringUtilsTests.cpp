@@ -256,6 +256,8 @@ TEST_CASE("TestStringUtils::testBase64Decode", "[test base64 decode]") {
   REQUIRE("oooooo" == StringUtils::from_base64("b29vb29v"));
   REQUIRE("\xfb\xff\xbf" == StringUtils::from_base64("-_-_"));
   REQUIRE("\xfb\xff\xbf" == StringUtils::from_base64("+/+/"));
+
+#ifndef __ARM_ARCH_7__
   REQUIRE(std::string({   0,   16, -125,   16,
                          81, -121,   32, -110,
                        -117,   48,  -45, -113,
@@ -280,6 +282,32 @@ TEST_CASE("TestStringUtils::testBase64Decode", "[test base64 decode]") {
                         -61,   28,  -77,  -45,
                          93,  -73,  -29,  -98,
                         -69,  -13,  -33,  -65}) == StringUtils::from_base64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"));
+#else
+  REQUIRE(std::string({   0,   16,  131,   16,
+                         81,  135,   32,  146,
+                        139,   48,  211,  143,
+                         65,   20,  147,   81,
+                         85,  151,   97,  150,
+                        155,  113,  215,  159,
+                        130,   24,  163,  146,
+                         89,  167,  162,  154,
+                        171,  178,  219,  175,
+                        195,   28,  179,  211,
+                         93,  183,  227,  158,
+                        187,  243,  223,  191}) == StringUtils::from_base64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"));
+  REQUIRE(std::string({   0,   16,  131,   16,
+                         81,  135,   32,  146,
+                        139,   48,  211,  143,
+                         65,   20,  147,   81,
+                         85,  151,   97,  150,
+                        155,  113,  215,  159,
+                        130,   24,  163,  146,
+                         89,  167,  162,  154,
+                        171,  178,  219,  175,
+                        195,   28,  179,  211,
+                         93,  183,  227,  158,
+                        187, 243, 223, 191}) == StringUtils::from_base64("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"));
+#endif
 
   REQUIRE("foobarbuzz" == StringUtils::from_base64("Zm9vYmFyYnV6eg=="));
   REQUIRE("foobarbuzz"== StringUtils::from_base64("\r\nZm9vYmFyYnV6eg=="));
